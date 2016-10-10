@@ -1,0 +1,12 @@
+{
+  "name": "lsoaPopNorm",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": ""
+  },
+  "dependencies": {
+    "lodash": "^3.10.1"
+  }
+}
