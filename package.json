@@ -6,7 +6,5 @@
   "scripts": {
     "start": ""
   },
-  "dependencies": {
-    "lodash": "^3.10.1"
-  }
+  "dependencies": {}
 }

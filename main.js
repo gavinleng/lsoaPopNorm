@@ -21,6 +21,11 @@ var dataNorm = require('./dataNorm.js');
 function databot(input, output, context) {
 	output.progress(0);
 	
+	if (!input.year || !input.areaId || !input.outPath || !input.mappingId || !input.popPrjAGId || !input.popONSNorm) {
+		output.error("invalid arguments - please supply year, areaId, outPath, mappingId, popPrjAGId, popONSNorm");
+		process.exit(1);
+	}
+	
 	var year1 = input.year;
 	
 	var stringArray = input.areaId;
@@ -52,26 +57,16 @@ function databot(input, output, context) {
 				var normInf = {"normId": input.popONSNorm, "output": output, "context": context, "mappingId": input.mappingId};
 				
 				dataNorm(dataArray, normInf, function(data) {
-					var dd, i;
+					var i;
 					var lendata = data.length;
-					var d = "";
-					
-					for (i = 0;  i <lendata; i++) {
-						dd = data[i];
-						d  += JSON.stringify(dd, null, 0) + "\n";
-					}
 					
 					output.debug("writing file %s", outPath);
-					fs.writeFile(outPath, d, function(err) {
-						if(err) {
-							output.error("Failed to write file - %s", err.message);
-							process.exit(1);
-						} else {
-							output.progress(100);
-							output.debug("file has been saved to %s", outPath);
-							process.exit(0);
-						}
-					});
+					
+					var stream = fs.createWriteStream(outPath);
+					for (i = 0;  i <lendata; i++) {
+						stream.write(JSON.stringify(data[i]) + "\n");
+					}
+					stream.end();
 				});
 			}
 		});
