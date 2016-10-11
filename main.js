@@ -11,21 +11,21 @@ var mappingId = require("./mappingId.js");
 //normalized module
 var dataNorm = require('./dataNorm.js');
 
-//get dataConfig file
-var dataConfig = require('./dataConfig.js');
-
-var year1 = dataConfig.year;
-
-var stringArray = dataConfig.areaId;
-
 //var popPrjAGId = "rJluQRTQR";
 //var popONSNorm = "S1gaspIGR";
 //var mappingId = "SkxyHi_MR";
-
-const outPath = path.resolve(dataConfig.outPath);
+/*var year = "2015;
+ var areaId = ["E06000045"];
+ var outPath = "./SotonNorm2015.json";*/
 
 function databot(input, output, context) {
 	output.progress(0);
+	
+	var year1 = input.year;
+	
+	var stringArray = input.areaId;
+	
+	const outPath = path.resolve(input.outPath);
 	
 	var p2c_config = {"mappingId": input.mappingId, "parent_type": "LAD15CD", "child_type": "LSOA11CD", "dataId": stringArray, "context": context, "output": output};
 	
