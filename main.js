@@ -6,7 +6,7 @@
 var fs = require("fs");
 var path = require("path");
 
-var mappingId = require("./mappingId.js");
+var mappingId = require("mappingid-bot");
 
 //normalized module
 var dataNorm = require('./dataNorm.js');
@@ -50,7 +50,6 @@ function databot(input, output, context) {
 				process.exit(1);
 			} else {
 				output.debug("got data");
-				output.progress(50);
 				
 				var dataArray = response.data;
 				
