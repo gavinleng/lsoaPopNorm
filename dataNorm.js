@@ -7,8 +7,10 @@
 
 var popNorm= require('./lib/popNorm.js');
 
-module.exports = exports =  function(dataArray, normInf, cb) {
-    popNorm(dataArray, normInf, function(data) {
-        cb(data);
+module.exports = exports =  function(projectedData, dataArray, normInf, cb) {
+    popNorm.popNorm(dataArray, normInf, function(dataNorm) {
+        popNorm.popDegroupAgeband(projectedData, dataNorm, function (data) {
+            cb(data);
+        };
     });
 };

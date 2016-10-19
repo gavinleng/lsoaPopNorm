@@ -11,6 +11,7 @@ var mappingId = require("mappingid-bot");
 //normalized module
 var dataNorm = require('./dataNorm.js');
 
+//var popPrjAG = "B1xex1pXR";
 //var popPrjAGId = "rJluQRTQR";
 //var popONSNorm = "S1gaspIGR";
 //var mappingId = "SkxyHi_MR";
@@ -21,8 +22,8 @@ var dataNorm = require('./dataNorm.js');
 function databot(input, output, context) {
 	output.progress(0);
 	
-	if (!input.year || !input.areaId || !input.outPath || !input.mappingId || !input.popPrjAGId || !input.popONSNorm) {
-		output.error("invalid arguments - please supply year, areaId, outPath, mappingId, popPrjAGId, popONSNorm");
+	if (!input.year || !input.areaId || !input.outPath || !input.mappingId || !input.popPrjAGId || !input.popONSNorm || !input.popPrjAG) {
+		output.error("invalid arguments - please supply year, areaId, outPath, mappingId, popPrjAGId, popONSNorm, popPrjAG");
 		process.exit(1);
 	}
 	
@@ -53,20 +54,40 @@ function databot(input, output, context) {
 				
 				var dataArray = response.data;
 				
-				var normInf = {"normId": input.popONSNorm, "output": output, "context": context, "mappingId": input.mappingId};
+				datasetId = input.popPrjId;
+				filter = {"area_id":{"$in": array},"year": year1};
+				projection = null;
+				options = {"limit":15390120};
 				
-				dataNorm(dataArray, normInf, function(data) {
-					var i;
-					var lendata = data.length;
-					
-					output.debug("writing file %s", outPath);
-					
-					var stream = fs.createWriteStream(outPath);
-					for (i = 0;  i <lendata; i++) {
-						stream.write(JSON.stringify(data[i]) + "\n");
-					}
-					stream.end();
-				});
+				api.getDatasetData(datasetId, filter, projection, options, function(err, response) {
+					if(err) {
+						output.error("Failed to get data - %s", err.message);
+						process.exit(1);
+					} else {
+						output.debug("got data");
+						
+						var projectedData = response.data;
+						
+						var normInf = {
+							"normId": input.popONSNorm,
+							"output": output,
+							"context": context,
+							"mappingId": input.mappingId
+						};
+						
+						dataNorm(projectedData, dataArray, normInf, function (data) {
+							var i;
+							var lendata = data.length;
+							
+							output.debug("writing file %s", outPath);
+							
+							var stream = fs.createWriteStream(outPath);
+							for (i = 0; i < lendata; i++) {
+								stream.write(JSON.stringify(data[i]) + "\n");
+							}
+							stream.end();
+						});
+					});
 			}
 		});
 	});
