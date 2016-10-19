@@ -11,6 +11,6 @@ module.exports = exports =  function(projectedData, dataArray, normInf, cb) {
     popNorm.popNorm(dataArray, normInf, function(dataNorm) {
         popNorm.popDegroupAgeband(projectedData, dataNorm, function (data) {
             cb(data);
-        };
+        });
     });
 };

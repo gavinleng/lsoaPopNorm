@@ -60,7 +60,7 @@ function databot(input, output, context) {
 				options = {"limit":15390120};
 				
 				api.getDatasetData(datasetId, filter, projection, options, function(err, response) {
-					if(err) {
+					if (err) {
 						output.error("Failed to get data - %s", err.message);
 						process.exit(1);
 					} else {
@@ -87,7 +87,8 @@ function databot(input, output, context) {
 							}
 							stream.end();
 						});
-					});
+					}
+				});
 			}
 		});
 	});
